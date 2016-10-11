@@ -1,4 +1,5 @@
-#ndvi-for-raspberry-pi
+#NDVI algorithm for Raspberry Pi
+
 This project provide several implementations of the NDVI real-time algorithm for Raspberry Pi and Raspberry Pi NoIR Camera.
 
 **Note:**
