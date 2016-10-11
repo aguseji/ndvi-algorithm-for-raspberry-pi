@@ -19,7 +19,7 @@ int main () {
     
     //set camera params
     int resolution[][2] = {{1920,1080},{1336,768},{1280,720},{1024,768},{800,600}, {640,480},{320,240}, {160,120},{100,133}};
-    int resolutionNumber = 0;
+    int resolutionNumber = 5;
     Camera.set(CV_CAP_PROP_FORMAT, CV_8UC3);   
 	Camera.set(CV_CAP_PROP_FRAME_WIDTH, resolution[resolutionNumber][0]);
 	Camera.set(CV_CAP_PROP_FRAME_HEIGHT, resolution[resolutionNumber][1]);
@@ -94,14 +94,14 @@ int main () {
 		cout << "\tFrame size: " << width << "x" << height << endl; 
 		cout << "\tPixels per frame: " << (width*height) << endl;
 		cout << "\tCumulative NDVI: " << cumulativeNdvi << endl;
-		cout << "\tAverage NDVI: " << averageNdvi << endl;
+		cout << "\tAverage NDVI: " << averageNdvi << endl << endl;
 		cout << "########################################" << endl;
 		cout << "\tTime per frame: " << totalTime  << " s" << endl;
 		cout << "\tFPS: " << fps << endl;
 		cout << "########################################" << endl;
 		
 		//display image
-		cv::imshow("Imagem original", frame);
+		//cv::imshow("Imagem original", frame);
     }
     
     //stop the camera

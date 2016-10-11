@@ -32,7 +32,7 @@ Use:
 ## Benchmark
 **Python:**
 - 12 FPS;
-- Resolution: 640x480;
+- Resolution: 100x133;
 
 **C++:**
 - 20 FPS;

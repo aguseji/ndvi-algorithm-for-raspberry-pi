@@ -85,10 +85,10 @@ def run():
         [800,600], [640,480],[320,240], [160,120],[100,133]]
         camera.resolution = reversed(resolution[8])
         camera.framerate = 25
-        
+
         #time to wait for the settings to be applied successfully
         time.sleep(2)
-
+        
         with picamera.array.PiRGBArray(camera) as stream:
             while True:
 				
@@ -142,6 +142,7 @@ def run():
     cv2.destroyAllWindows()
 
 #starts the application here
-if __name__ == 'main':
+if __name__ == "__main__":
 	os.system("clear")
+	print "teste"
 	run()
