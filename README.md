@@ -35,5 +35,5 @@ Use:
 - Resolution: 640x480;
 
 **C++:**
-- -- FPS;
-- Resolution: ---x---;
+- 20 FPS;
+- Resolution: 640x480;
