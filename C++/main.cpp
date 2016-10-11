@@ -18,13 +18,13 @@ int main () {
     double cumulativeNdvi, averageNdvi;
     
     //set camera params
-    int resolution[][2] = {{1920,1080},{1336,768},{1280,720},{1024,768},{800,600}, {640,480},{320,240}, {160,120},{100,133}};
+    int resolution[][2] = {{1920,1080},{1336,768},{1280,720},{1024,768},{800,600},{640,480},{320,240},{160,120},{100,133}};
     int resolutionNumber = 5;
     Camera.set(CV_CAP_PROP_FORMAT, CV_8UC3);   
 	Camera.set(CV_CAP_PROP_FRAME_WIDTH, resolution[resolutionNumber][0]);
 	Camera.set(CV_CAP_PROP_FRAME_HEIGHT, resolution[resolutionNumber][1]);
 	/**
-	 * Sets a property in the VideoCapture. 
+	 * Sets a property in the VideoCapture.
 	* * 
 	* Implemented properties:
 	* CV_CAP_PROP_FRAME_WIDTH,CV_CAP_PROP_FRAME_HEIGHT,
@@ -50,7 +50,7 @@ int main () {
 		
 		//frame capture
         Camera.grab();
-        Camera.retrieve (frame);
+        Camera.retrieve(frame);
         
         //frame properties
         int width = frame.size().width;
@@ -71,8 +71,8 @@ int main () {
         //nir = channels[2];
 
         //calculate NDVI
-        subtract(channels[1], channels[2], top);
-		add(channels[1], channels[2], bottom);
+        subtract(channels[0], channels[2], top);
+		add(channels[0], channels[2], bottom);
 		//avoid division by zero in the entire array
 		//bottom[bottom == 0] = 0.01
 		divide(top, bottom, ndvi);

@@ -81,9 +81,8 @@ def displayImage(img, r, g, b, ndvi):
 def run():
     with picamera.PiCamera() as camera:
         #camera settings
-        resolution = [[1920,1080],[1336,768],[1280,720],[1024,768],
-        [800,600], [640,480],[320,240], [160,120],[100,133]]
-        camera.resolution = reversed(resolution[8])
+        resolution = [[1920,1080],[1336,768],[1280,720],[1024,768],[800,600],[640,480],[320,240],[160,120],[100,133]]
+        camera.resolution = resolution[5]
         camera.framerate = 25
 
         #time to wait for the settings to be applied successfully
@@ -107,7 +106,7 @@ def run():
 
 				#calculates the average of ndvi region
 				cumulativeNdvi = np.sum(ndvi)
-				totalOfIndexes = len(ndvi[0]) * len(ndvi)
+				totalOfIndexes = img.shape[1]*img.shape[0]
 				averageNdvi = cumulativeNdvi / totalOfIndexes
 				
 				totalTime = time.time() - startTime
@@ -117,7 +116,7 @@ def run():
 				print "#" * 7, "NDVI Python by Maik Basso", "#" * 7
 				print "#" * 41
 				print "\n"
-				print "\tFrame size: %d x %d" %(img.shape[0],img.shape[1])
+				print "\tFrame size: %d x %d" %(img.shape[1],img.shape[0])
 				print "\tPixels per frame: %d" %(totalOfIndexes)
 				print "\tCumulative NDVI: %d" %(cumulativeNdvi)
 				print "\tAverage NDVI: %f" %(averageNdvi)
@@ -128,7 +127,7 @@ def run():
 				print "#" * 41
 
 				#show images
-				displayImage(img, r, g, b, ndvi)
+				#displayImage(img, r, g, b, ndvi)
 				
 				#Delete the contents of a stream.
 				stream.truncate(0)
@@ -144,5 +143,4 @@ def run():
 #starts the application here
 if __name__ == "__main__":
 	os.system("clear")
-	print "teste"
 	run()
