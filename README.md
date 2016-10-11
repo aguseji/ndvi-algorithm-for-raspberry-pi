@@ -23,7 +23,7 @@ Requirements:
   - RaspiCam: C++ API, version 1.3 or higher, can be installed in http://www.uco.es/investiga/grupos/ava/node/40;
 
 Compile:
-  - In C++ folder, run the command: `g++ main.cpp -o  main -I/usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui`
+  - In C++ folder, run the command: `$ g++ main.cpp -o  main -I/usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui`
 
 Use:
   - Raspberry Pi open the terminal in this folder;
