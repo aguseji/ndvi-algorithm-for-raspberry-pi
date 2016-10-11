@@ -1,4 +1,7 @@
 /*
+ * Author: Maik Basso
+ * Email: maik@maikbasso.com.br
+ * 
  * To compile: 
  * g++ main.cpp -o  main -I/usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui
  *
@@ -27,7 +30,7 @@ int main () {
     time_t timerBegin, timerEnd;
     raspicam::RaspiCam_Cv Camera;
     cv::Mat frame;
-    float ndviAccumulated, ndviMedium;
+    float cumulativeNdvi, averageNdvi;
     
     //set camera params
     Camera.set( CV_CAP_PROP_FORMAT, CV_8UC1 );
@@ -43,8 +46,8 @@ int main () {
 		time(&timerBegin);
 		
 		//initialize variables
-		ndviAccumulated = 0.0;
-		ndviMedium = 0.0;
+		cumulativeNdvi = 0.0;
+		averageNdvi = 0.0;
 		
 		//frame capture
         Camera.grab();
@@ -69,11 +72,11 @@ int main () {
 		cout << "######## NDVI C++ by Maik Basso ########" << endl;
 		cout << "########################################" << endl << endl;
 		cout << "\tFrame size: " << width << "x" << height << endl; 
-		cout << "\tNumber of pixels: " << (width*height) << endl;
-		cout << "\tAccumulated NDVI: " << ndviAccumulated << endl;
-		cout << "\tMedium NDVI: " << ndviMedium << endl;
+		cout << "\tPixels per frame: " << (width*height) << endl;
+		cout << "\tCumulative NDVI: " << cumulativeNdvi << endl;
+		cout << "\taAverage NDVI: " << averageNdvi << endl;
 		cout << "########################################" << endl;
-		cout << "\tTempo por frame: " << totalTime  << " s" << endl;
+		cout << "\tTime per frame: " << totalTime  << " s" << endl;
 		cout << "\tFPS: " << (1 / totalTime) << endl;
 		cout << "########################################" << endl;
 		
