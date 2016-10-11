@@ -9,17 +9,15 @@
 #include <ctime>
 #include <iostream>
 #include <raspicam/raspicam_cv.h>
-using namespace std;
 
-float calculateNDVI(float nir, float g, float b){
-	float ndvi = 0.0;
-	float top = nir - b;
-	float bottom = nir + b;
-	//exixte not divide by zero
-	if(bottom == 0) bottom = 0.01;
-	ndvi = top / bottom;
-	return ndvi;
-}
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <iostream>
+#include <string>
+#include <cv.h>
+#include <highgui.h>
+
+using namespace std;
 
 void displayImage(cv::Mat image){
 	cv::imshow("Imagem original", image);
@@ -29,11 +27,11 @@ int main () {
    
     time_t timerBegin, timerEnd;
     raspicam::RaspiCam_Cv Camera;
-    cv::Mat frame;
+    cv::Mat frame, ndvi, top, bottom;
     float cumulativeNdvi, averageNdvi;
     
     //set camera params
-    Camera.set( CV_CAP_PROP_FORMAT, CV_8UC1 );
+    Camera.set( CV_CAP_PROP_FORMAT, CV_8UC3);
     
     //Open camera
     if (!Camera.open()) {
@@ -44,11 +42,7 @@ int main () {
 	while(true) {
 		//start time
 		time(&timerBegin);
-		
-		//initialize variables
-		cumulativeNdvi = 0.0;
-		averageNdvi = 0.0;
-		
+
 		//frame capture
         Camera.grab();
         Camera.retrieve (frame);
@@ -56,10 +50,30 @@ int main () {
         //frame properties
         int width = frame.size().width;
 		int height = frame.size().height;
+		
+		//initialize variables
+		cumulativeNdvi = 0.0;
+		averageNdvi = 0.0;
+		top = cv::Mat::ones(height, width, CV_32FC1);
+		bottom = cv::Mat::ones(height, width, CV_32FC1);
+		ndvi = cv::Mat::ones(height, width, CV_32FC1);
+
         
+        //get the image bands
+		std::vector<cv::Mat> channels;
+        split(frame, channels);
+        //b = channels[0];
+        //g = channels[1];
+        //nir = channels[2];
+
         //calculate NDVI
-        
-        
+        subtract(channels[2], channels[0], top);
+		add(channels[2], channels[0], bottom);
+		divide(top, bottom, ndvi);
+		//http://docs.opencv.org/2.4/modules/core/doc/operations_on_arrays.html
+		meanStdDev(ndvi, averageNdvi);
+		//averageNdvi = cumulativeNdvi / (width*height);
+
         //stop time
         time (&timerEnd);
         
@@ -77,7 +91,7 @@ int main () {
 		cout << "\taAverage NDVI: " << averageNdvi << endl;
 		cout << "########################################" << endl;
 		cout << "\tTime per frame: " << totalTime  << " s" << endl;
-		cout << "\tFPS: " << (1 / totalTime) << endl;
+		cout << "\tFPS: " << ((float) 1 / totalTime) << endl;
 		cout << "########################################" << endl;
 		
 		//display image
