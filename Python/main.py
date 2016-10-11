@@ -17,7 +17,7 @@ def calculateNdvi(nir, g, b):
 	top = (nir.astype(float) - b.astype(float))
 	bottom = (nir.astype(float) + b.astype(float))
 	# avoid division by zero in the entire array
-	bottom[bottom == 0] = 0.01
+	bottom[bottom == 0] = 0.00001
 	ndvi = top / bottom
 	return ndvi
 

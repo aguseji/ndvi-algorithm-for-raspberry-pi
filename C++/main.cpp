@@ -10,29 +10,34 @@
 #include <iostream>
 #include <raspicam/raspicam_cv.h>
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <iostream>
-#include <string>
-#include <cv.h>
-#include <highgui.h>
-
 using namespace std;
-
-void displayImage(cv::Mat image){
-	cv::imshow("Imagem original", image);
-}
  
 int main () {
-   
-    time_t timerBegin, timerEnd;
     raspicam::RaspiCam_Cv Camera;
     cv::Mat frame, ndvi, top, bottom;
-    float cumulativeNdvi, averageNdvi;
+    double cumulativeNdvi, averageNdvi;
     
     //set camera params
-    Camera.set( CV_CAP_PROP_FORMAT, CV_8UC3);
-    
+    int resolution[][2] = {{1920,1080},{1336,768},{1280,720},{1024,768},{800,600}, {640,480},{320,240}, {160,120},{100,133}};
+    int resolutionNumber = 0;
+    Camera.set(CV_CAP_PROP_FORMAT, CV_8UC3);   
+	Camera.set(CV_CAP_PROP_FRAME_WIDTH, resolution[resolutionNumber][0]);
+	Camera.set(CV_CAP_PROP_FRAME_HEIGHT, resolution[resolutionNumber][1]);
+	/**
+	 * Sets a property in the VideoCapture. 
+	* * 
+	* Implemented properties:
+	* CV_CAP_PROP_FRAME_WIDTH,CV_CAP_PROP_FRAME_HEIGHT,
+	* CV_CAP_PROP_FORMAT: CV_8UC1 or CV_8UC3
+	* CV_CAP_PROP_BRIGHTNESS: [0,100]
+	* CV_CAP_PROP_CONTRAST: [0,100]
+	* CV_CAP_PROP_SATURATION: [0,100]
+	* CV_CAP_PROP_GAIN: (iso): [0,100]
+	* CV_CAP_PROP_EXPOSURE: -1 auto. [1,100] shutter speed from 0 to 33ms
+	* CV_CAP_PROP_WHITE_BALANCE_RED_V : [1,100] -1 auto whitebalance
+	* CV_CAP_PROP_WHITE_BALANCE_BLUE_U : [1,100] -1 auto whitebalance
+	**/
+
     //Open camera
     if (!Camera.open()) {
 		cerr << "Error opening the camera" << endl;
@@ -41,8 +46,8 @@ int main () {
     
 	while(true) {
 		//start time
-		time(&timerBegin);
-
+		double timerBegin = cv::getTickCount();
+		
 		//frame capture
         Camera.grab();
         Camera.retrieve (frame);
@@ -57,7 +62,6 @@ int main () {
 		top = cv::Mat::ones(height, width, CV_32FC1);
 		bottom = cv::Mat::ones(height, width, CV_32FC1);
 		ndvi = cv::Mat::ones(height, width, CV_32FC1);
-
         
         //get the image bands
 		std::vector<cv::Mat> channels;
@@ -67,18 +71,20 @@ int main () {
         //nir = channels[2];
 
         //calculate NDVI
-        subtract(channels[2], channels[0], top);
-		add(channels[2], channels[0], bottom);
+        subtract(channels[1], channels[2], top);
+		add(channels[1], channels[2], bottom);
+		//avoid division by zero in the entire array
+		//bottom[bottom == 0] = 0.01
 		divide(top, bottom, ndvi);
-		//http://docs.opencv.org/2.4/modules/core/doc/operations_on_arrays.html
-		meanStdDev(ndvi, averageNdvi);
-		//averageNdvi = cumulativeNdvi / (width*height);
-
-        //stop time
-        time (&timerEnd);
+		//http://stackoverflow.com/questions/12687437/how-to-calculate-and-use-cvmat-mean-value
+		//cv::Scalar tempVal = mean(ndvi);
+		//float averageNdvi = tempVal.val[0];
+		cumulativeNdvi = cv::sum(ndvi)[0];
+		averageNdvi = cumulativeNdvi / (width*height);
         
         //total time
-        double totalTime = difftime(timerEnd, timerBegin);
+        double totalTime = double(cv::getTickCount()-timerBegin)/double(cv::getTickFrequency());
+        double fps = (float) ((float)(1)/totalTime);
         
         //statistics
         system("clear");
@@ -88,14 +94,14 @@ int main () {
 		cout << "\tFrame size: " << width << "x" << height << endl; 
 		cout << "\tPixels per frame: " << (width*height) << endl;
 		cout << "\tCumulative NDVI: " << cumulativeNdvi << endl;
-		cout << "\taAverage NDVI: " << averageNdvi << endl;
+		cout << "\tAverage NDVI: " << averageNdvi << endl;
 		cout << "########################################" << endl;
 		cout << "\tTime per frame: " << totalTime  << " s" << endl;
-		cout << "\tFPS: " << ((float) 1 / totalTime) << endl;
+		cout << "\tFPS: " << fps << endl;
 		cout << "########################################" << endl;
 		
 		//display image
-		displayImage(frame);
+		cv::imshow("Imagem original", frame);
     }
     
     //stop the camera
