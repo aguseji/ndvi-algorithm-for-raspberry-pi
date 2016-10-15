@@ -82,8 +82,8 @@ def run():
     with picamera.PiCamera() as camera:
         #camera settings
         resolution = [[1920,1080],[1336,768],[1280,720],[1024,768],[800,600],[640,480],[320,240],[160,120],[100,133]]
-        camera.resolution = resolution[5]
-        camera.framerate = 25
+        camera.resolution = resolution[8]
+        camera.framerate = 30
 
         #time to wait for the settings to be applied successfully
         time.sleep(2)

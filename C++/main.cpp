@@ -19,10 +19,11 @@ int main () {
     
     //set camera params
     int resolution[][2] = {{1920,1080},{1336,768},{1280,720},{1024,768},{800,600},{640,480},{320,240},{160,120},{100,133}};
-    int resolutionNumber = 5;
+    int resolutionNumber = 8;
     Camera.set(CV_CAP_PROP_FORMAT, CV_8UC3);   
 	Camera.set(CV_CAP_PROP_FRAME_WIDTH, resolution[resolutionNumber][0]);
 	Camera.set(CV_CAP_PROP_FRAME_HEIGHT, resolution[resolutionNumber][1]);
+	Camera.set(CV_CAP_PROP_FPS, 60);
 	/**
 	 * Sets a property in the VideoCapture.
 	* * 
