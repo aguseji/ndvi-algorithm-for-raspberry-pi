@@ -11,7 +11,7 @@ This project provide several implementations of the NDVI real-time algorithm for
 
 Requirements:
   - Python 2.7 or higher;
-  - OpenCV 2.4 or higher, can be installed in http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/;
+  - OpenCV 2.4 or higher, can be installed using: `sudo apt-get install g++ libopencv-dev python-dev python-numpy python-opencv opencv-docs ffmpeg`
 	
 Use:
   - Raspberry Pi open the terminal in this folder;
@@ -20,6 +20,7 @@ Use:
 ## Using C++ algorithm:
 
 Requirements:
+  - OpenCV 2.4 or higher, can be installed using: `sudo apt-get install g++ libopencv-dev python-dev python-numpy python-opencv opencv-docs ffmpeg`
   - RaspiCam: C++ API, version 1.3 or higher, can be installed in http://www.uco.es/investiga/grupos/ava/node/40;
 
 Compile:
